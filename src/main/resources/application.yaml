@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: mysql
 
 ---
 spring:
@@ -28,4 +28,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   batch:
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
+    job:
+      enabled: false
