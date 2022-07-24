@@ -13,13 +13,13 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class JobInstanceConfiguration {
+public class JobParameterConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
     public Job job() {
-        return this.jobBuilderFactory.get("job").start(this.step1()).next(this.step2()).build();
+        return this.jobBuilderFactory.get("Job").start(this.step1()).next(this.step2()).build();
     }
 
     @Bean

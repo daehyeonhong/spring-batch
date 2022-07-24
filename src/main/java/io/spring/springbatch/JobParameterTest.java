@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import java.util.Date;
 
 @Component
-public class JobRunner implements ApplicationRunner {
+public class JobParameterTest implements ApplicationRunner {
     @Autowired
     private JobLauncher jobLauncher;
     @Autowired
@@ -19,7 +20,10 @@ public class JobRunner implements ApplicationRunner {
     @Override
     public void run(final ApplicationArguments args) throws Exception {
         final JobParameters jobParameters = new JobParametersBuilder()
-                .addString("name", "user2")
+                .addString("name", "user1")
+                .addLong("seq", 2L)
+                .addDate("date", new Date())
+                .addDouble("age", 16.7)
                 .toJobParameters();
         this.jobLauncher.run(job, jobParameters);
     }
