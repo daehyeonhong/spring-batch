@@ -1,5 +1,6 @@
 package io.spring.springbatch;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -25,6 +26,9 @@ public class JobParameterConfiguration {
     @Bean
     public Step step1() {
         return this.stepBuilderFactory.get("step1").tasklet((contribution, chunkContext) -> {
+            final ObjectMapper mapper = new ObjectMapper();
+            log.info(mapper.writeValueAsString(contribution.getStepExecution().getJobExecution().getJobParameters()));
+            log.info(mapper.writeValueAsString(chunkContext.getStepContext().getJobParameters()));
             log.info("Step1 was Executed");
             return FINISHED;
         }).build();
