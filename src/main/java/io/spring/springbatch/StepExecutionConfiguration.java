@@ -13,30 +13,37 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class StepConfiguration {
+public class StepExecutionConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
     public Job job() {
-        return this.jobBuilderFactory.get("Job")
-                .start(this.step1())
-                .next(this.step2())
-                .build();
+        return this.jobBuilderFactory.get("Job").start(this.step1()).next(this.step2()).next(this.step3()).build();
     }
 
     @Bean
     public Step step1() {
         return this.stepBuilderFactory.get("step1").tasklet((contribution, chunkContext) -> {
-            log.info("Step1 has Executed");
+            log.info(">>>Step1 has Executed");
             return FINISHED;
         }).build();
     }
 
     @Bean
     public Step step2() {
-        return this.stepBuilderFactory.get("step2")
-                .tasklet(new CustomTasklet())
-                .build();
+        return this.stepBuilderFactory.get("step2").tasklet((contribution, chunkContext) -> {
+            log.info(">>>Step2 has Executed");
+//            throw new RuntimeException("step2 has failed");
+            return FINISHED;
+        }).build();
+    }
+
+    @Bean
+    public Step step3() {
+        return this.stepBuilderFactory.get("step3").tasklet((contribution, chunkContext) -> {
+            log.info(">>>Step3 has Executed");
+            return FINISHED;
+        }).build();
     }
 }
