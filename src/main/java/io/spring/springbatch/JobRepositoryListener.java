@@ -26,7 +26,7 @@ public class JobRepositoryListener implements JobExecutionListener {
     @Override
     public void afterJob(final JobExecution jobExecution) {
         final String jobName = jobExecution.getJobInstance().getJobName();
-        final JobParameters jobParameters = new JobParametersBuilder().addString("name", "user1").toJobParameters();
+        final JobParameters jobParameters = new JobParametersBuilder().addString("name", "user2").toJobParameters();
         final JobExecution lastJobExecution = this.jobRepository.getLastJobExecution(jobName, jobParameters);
         if (lastJobExecution != null) for (final StepExecution execution : lastJobExecution.getStepExecutions()) {
             final BatchStatus status = execution.getStatus();
