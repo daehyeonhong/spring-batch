@@ -8,6 +8,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import static java.lang.Thread.sleep;
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 
 @Slf4j
@@ -28,7 +29,10 @@ public class JobLauncherConfiguration {
     @Bean
     public Step step1() {
         return this.stepBuilderFactory.get("step1")
-                .tasklet((contribution, chunkContext) -> FINISHED)
+                .tasklet((contribution, chunkContext) -> {
+                    sleep(3000);
+                    return FINISHED;
+                })
                 .build();
     }
 
