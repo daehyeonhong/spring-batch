@@ -13,17 +13,15 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class JobRepositoryConfiguration {
+public class JobLauncherConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private final JobRepositoryListener jobRepositoryListener;
 
     @Bean
     public Job job() {
         return this.jobBuilderFactory.get("Job")
                 .start(this.step1())
                 .next(this.step2())
-                .listener(this.jobRepositoryListener)
                 .build();
     }
 
@@ -37,7 +35,7 @@ public class JobRepositoryConfiguration {
     @Bean
     public Step step2() {
         return this.stepBuilderFactory.get("step2")
-                .tasklet((contribution, chunkContext) -> FINISHED)
+                .tasklet((contribution, chunkContext) -> null)
                 .build();
     }
 }
