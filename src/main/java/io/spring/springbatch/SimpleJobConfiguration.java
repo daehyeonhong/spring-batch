@@ -8,8 +8,6 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import static org.springframework.batch.core.BatchStatus.FAILED;
-import static org.springframework.batch.core.ExitStatus.STOPPED;
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 
 @Slf4j
@@ -21,7 +19,7 @@ public class SimpleJobConfiguration {
 
     @Bean
     public Job batchJob() {
-        return this.jobBuilderFactory.get("batchJob")
+        return this.jobBuilderFactory.get("simpleJob")
                 .start(this.step1())
                 .next(this.step2())
                 .next(this.step3())
@@ -31,32 +29,21 @@ public class SimpleJobConfiguration {
     @Bean
     public Step step1() {
         return this.stepBuilderFactory.get("step1")
-                .tasklet((contribution, chunkContext) -> {
-                    log.info("Step1 has executed");
-                    return FINISHED;
-                })
+                .tasklet((contribution, chunkContext) -> FINISHED)
                 .build();
     }
 
     @Bean
     public Step step2() {
         return this.stepBuilderFactory.get("step2")
-                .tasklet((contribution, chunkContext) -> {
-                    log.info("Step2 has executed");
-                    return FINISHED;
-                })
+                .tasklet((contribution, chunkContext) -> FINISHED)
                 .build();
     }
 
     @Bean
     public Step step3() {
         return this.stepBuilderFactory.get("step3")
-                .tasklet((contribution, chunkContext) -> {
-                    chunkContext.getStepContext().getStepExecution().setStatus(FAILED);
-                    contribution.setExitStatus(STOPPED);
-                    log.info("Step3 has executed");
-                    return FINISHED;
-                })
+                .tasklet((contribution, chunkContext) -> FINISHED)
                 .build();
     }
 
