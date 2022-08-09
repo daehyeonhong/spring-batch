@@ -13,16 +13,17 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class SimpleJobConfiguration {
+public class ValidatorConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
     public Job batchJob() {
-        return this.jobBuilderFactory.get("simpleJob")
+        return this.jobBuilderFactory.get("batchJob")
                 .start(this.step1())
                 .next(this.step2())
                 .next(this.step3())
+                .validator(new CustomJobParametersValidator())
                 .build();
     }
 
