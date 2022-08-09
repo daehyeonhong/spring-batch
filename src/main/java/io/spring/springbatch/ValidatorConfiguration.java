@@ -6,6 +6,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.DefaultJobParametersValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
@@ -23,7 +24,7 @@ public class ValidatorConfiguration {
                 .start(this.step1())
                 .next(this.step2())
                 .next(this.step3())
-                .validator(new CustomJobParametersValidator())
+                .validator(new DefaultJobParametersValidator(new String[]{"name", "date"}, new String[]{"count"}))
                 .build();
     }
 
