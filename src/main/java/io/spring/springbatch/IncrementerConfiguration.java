@@ -14,7 +14,7 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class PreventRestartConfiguration {
+public class IncrementerConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -23,7 +23,7 @@ public class PreventRestartConfiguration {
         return this.jobBuilderFactory.get("batchJob")
                 .start(this.step1())
                 .next(this.step2())
-                .preventRestart()
+                .incrementer(new CustomJobParametersIncrementer())
                 .build();
     }
 
