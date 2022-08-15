@@ -14,25 +14,22 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class TaskletStepConfiguration {
+public class TaskletConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
     public Job batchJob() {
         return this.jobBuilderFactory.get("batchJob")
+                .start(this.step1())
                 .incrementer(new RunIdIncrementer())
-                .start(this.taskletStep())
                 .build();
     }
 
     @Bean
-    public Step taskletStep() {
-        return this.stepBuilderFactory.get("tasklet")
-                .tasklet((contribution, chunkContext) -> {
-                    log.info("step was executed");
-                    return FINISHED;
-                }).build();
+    public Step step1() {
+        return this.stepBuilderFactory.get("step1")
+                .tasklet((contribution, chunkContext) -> FINISHED)
+                .build();
     }
-
 }
