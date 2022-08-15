@@ -22,6 +22,7 @@ public class TaskletConfiguration {
     public Job batchJob() {
         return this.jobBuilderFactory.get("batchJob")
                 .start(this.step1())
+                .next(this.step2())
                 .incrementer(new RunIdIncrementer())
                 .build();
     }
@@ -30,6 +31,13 @@ public class TaskletConfiguration {
     public Step step1() {
         return this.stepBuilderFactory.get("step1")
                 .tasklet((contribution, chunkContext) -> FINISHED)
+                .build();
+    }
+
+    @Bean
+    public Step step2() {
+        return this.stepBuilderFactory.get("step2")
+                .tasklet(new CustomTasklet())
                 .build();
     }
 }
