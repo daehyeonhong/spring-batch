@@ -1,4 +1,4 @@
-package com.spring.batch.hello
+package com.spring.batch.database
 
 import io.klogging.NoCoLogging
 import org.springframework.batch.core.Job
@@ -12,21 +12,20 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
-class HelloJobConfiguration(
+class DBJobConfiguration(
     private val jobRepository: JobRepository,
     private val platformTransactionManager: PlatformTransactionManager,
 ) : NoCoLogging {
     @Bean
-    fun helloJob(): Job {
-        return JobBuilder("helloJob", this.jobRepository)
-            .start(helloStep())
-            .next(helloStep2())
+    fun job(): Job {
+        return JobBuilder("job", this.jobRepository)
+            .start(step1())
             .build()
     }
 
     @Bean
-    fun helloStep(): Step {
-        return StepBuilder("helloStep", this.jobRepository)
+    fun step1(): Step {
+        return StepBuilder("step1", this.jobRepository)
             .tasklet({ _, _ ->
                 logger.info { "Hello, World!" }
                 RepeatStatus.FINISHED
@@ -35,10 +34,10 @@ class HelloJobConfiguration(
     }
 
     @Bean
-    fun helloStep2(): Step {
-        return StepBuilder("helloStep2", this.jobRepository)
+    fun step2(): Step {
+        return StepBuilder("step2", this.jobRepository)
             .tasklet({ _, _ ->
-                logger.info { "Step 2 was executed!" }
+                logger.info { "Hello, World!" }
                 RepeatStatus.FINISHED
             }, this.platformTransactionManager)
             .build()
