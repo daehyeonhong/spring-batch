@@ -20,6 +20,7 @@ class DBJobConfiguration(
     fun job(): Job {
         return JobBuilder("job", this.jobRepository)
             .start(step1())
+            .next(step2())
             .build()
     }
 

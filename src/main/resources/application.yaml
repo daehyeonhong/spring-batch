@@ -27,4 +27,4 @@ spring:
     driver-class-name: org.postgresql.Driver
   batch:
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
