@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
-class JobConfiguration(
+class JobParameterConfiguration(
     private val jobRepository: JobRepository,
     private val platformTransactionManager: PlatformTransactionManager,
 ) : NoCoLogging {
@@ -24,16 +24,18 @@ class JobConfiguration(
 
     @Bean
     fun step1(): Step = StepBuilder("step1", this.jobRepository)
-        .tasklet({ _, _ ->
-            logger.info { "Hello, World!" }
+        .tasklet({ contribution, chunkContext ->
+            logger.info { "jobParameters: ${contribution.stepExecution.jobExecution.jobParameters}" }
+            logger.info { "chunkContext: ${chunkContext.stepContext.jobParameters}" }
             RepeatStatus.FINISHED
         }, this.platformTransactionManager)
         .build()
 
     @Bean
     fun step2(): Step = StepBuilder("step2", this.jobRepository)
-        .tasklet({ _, _ ->
-            logger.info { "Hello, World!" }
+        .tasklet({ contribution, chunkContext ->
+            logger.info { "jobParameters: ${contribution.stepExecution.jobExecution.jobParameters}" }
+            logger.info { "chunkContext: ${chunkContext.stepContext.jobParameters}" }
             RepeatStatus.FINISHED
         }, this.platformTransactionManager)
         .build()

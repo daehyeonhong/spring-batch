@@ -6,17 +6,22 @@ import org.springframework.batch.core.launch.JobLauncher
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
+import java.time.Instant
+import java.util.*
 
 @Component
-class JobRunner(
+class JobParameterTest(
     private val jobLauncher: JobLauncher,
     private val job: Job,
 ) : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
-        val jobParameters = JobParametersBuilder()
-            .addString("name", "user2")
+        val parameters = JobParametersBuilder()
+            .addString("name", "user1")
+            .addLong("seq", 2L)
+            .addDate("date", Date.from(Instant.now()))
+            .addDouble("height", 184.5)
             .toJobParameters()
 
-        this.jobLauncher.run(job, jobParameters)
+        this.jobLauncher.run(this.job, parameters)
     }
 }
