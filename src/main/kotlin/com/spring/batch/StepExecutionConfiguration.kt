@@ -11,8 +11,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
+
 @Configuration
-class StepConfiguration(
+class StepExecutionConfiguration(
     private val jobRepository: JobRepository,
     private val platformTransactionManager: PlatformTransactionManager,
 ) : NoCoLogging {
@@ -21,6 +22,7 @@ class StepConfiguration(
         return JobBuilder("job", this.jobRepository)
             .start(step1())
             .next(step2())
+            .next(step3())
             .build()
     }
 
@@ -28,7 +30,7 @@ class StepConfiguration(
     fun step1(): Step {
         return StepBuilder("step1", this.jobRepository)
             .tasklet({ _, _ ->
-                logger.info { "Hello, World!" }
+                logger.info { welcomeMessage }
                 RepeatStatus.FINISHED
             }, this.platformTransactionManager)
             .build()
@@ -38,9 +40,29 @@ class StepConfiguration(
     fun step2(): Step {
         return StepBuilder("step2", this.jobRepository)
             .tasklet(
-                CustomTasklet(),
+                { _, _ ->
+                    logger.info { welcomeMessage }
+                    RepeatStatus.FINISHED
+                },
                 this.platformTransactionManager
             )
             .build()
+    }
+
+    @Bean
+    fun step3(): Step {
+        return StepBuilder("step3", this.jobRepository)
+            .tasklet(
+                { _, _ ->
+                    logger.info { welcomeMessage }
+                    RepeatStatus.FINISHED
+                },
+                this.platformTransactionManager
+            )
+            .build()
+    }
+
+    companion object {
+        private const val welcomeMessage = "Hello, World!"
     }
 }
