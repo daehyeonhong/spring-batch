@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: postgres
+  batch:
+    job:
+      enabled: false
 
 ---
 
@@ -26,7 +29,5 @@ spring:
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   batch:
-    jdbc:
-      initialize-schema: always
     job:
       enabled: false
