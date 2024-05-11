@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
-
 @Configuration
 class JobRepositoryConfiguration(
 ) : NoCoLogging {
@@ -38,6 +37,7 @@ class JobRepositoryConfiguration(
         jobRepository: JobRepository,
         platformTransactionManager: PlatformTransactionManager,
     ): Step {
+        Thread.sleep(103)
         logger.info { "Creating step1" }
         return StepBuilder("step1", jobRepository)
             .tasklet(printGreeting(), platformTransactionManager)

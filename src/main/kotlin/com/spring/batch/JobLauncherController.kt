@@ -7,9 +7,7 @@ import org.springframework.batch.core.configuration.support.DefaultBatchConfigur
 import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.task.SimpleAsyncTaskExecutor
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
@@ -26,7 +24,13 @@ class JobLauncherController(
         val taskExecutorJobLauncher = this.defaultBatchConfiguration.jobLauncher() as TaskExecutorJobLauncher
         taskExecutorJobLauncher.setTaskExecutor(SimpleAsyncTaskExecutor())
         taskExecutorJobLauncher.run(job, jobParameters)
+        logger.info { "batch completed1" }
         return "batch completed"
+    }
+
+    @GetMapping("/")
+    fun index() {
+        println("Hello, World!")
     }
 }
 
