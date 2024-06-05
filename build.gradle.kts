@@ -27,7 +27,6 @@ configurations {
 val kloggingVersion: String = "0.5.11"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-batch")
-    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.klogging:klogging-spring-boot-starter:${kloggingVersion}")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

@@ -1,9 +1,6 @@
 spring:
   profiles:
-    active: postgres
-  batch:
-    job:
-      enabled: false
+    active: local
 
 ---
 
