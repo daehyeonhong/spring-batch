@@ -27,6 +27,18 @@ class JobConfiguration(
     ): Job = JobBuilder("batchJob1", this.jobRepository).start(step1).next(step2).build()
 
     @Bean
+    fun job2(
+        @Qualifier(value = "step1") step1: Step,
+        @Qualifier(value = "step2") step2: Step,
+    ): Job = JobBuilder("batchJob2", this.jobRepository).start(step1).next(step2).build()
+
+    @Bean
+    fun job3(
+        @Qualifier(value = "step1") step1: Step,
+        @Qualifier(value = "step2") step2: Step,
+    ): Job = JobBuilder("batchJob3", this.jobRepository).start(step1).next(step2).build()
+
+    @Bean
     @JobScope
     fun step1(
         @Value("#{jobParameters['targetDate']}") targetDate: LocalDate

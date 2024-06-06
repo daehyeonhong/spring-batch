@@ -13,7 +13,9 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-
+  batch:
+    job:
+      name: ${job.name:NONE}
 ---
 
 spring:
@@ -27,4 +29,4 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   batch:
     job:
-      enabled: false
+      name: ${job.name:NONE}
