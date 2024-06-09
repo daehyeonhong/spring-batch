@@ -6,7 +6,6 @@ import org.springframework.batch.core.ExitStatus
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.job.builder.JobBuilder
-import org.springframework.batch.core.launch.support.RunIdIncrementer
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.repeat.RepeatStatus
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
-class SimpleJobConfiguration(
+class StartNextConfiguration(
     private val jobRepository: JobRepository,
     private val platformTransactionManager: PlatformTransactionManager,
 ) : NoCoLogging {
@@ -28,10 +27,6 @@ class SimpleJobConfiguration(
         .start(step1)
         .next(step2)
         .next(step3)
-        .incrementer(RunIdIncrementer())
-        .validator { }
-        .preventRestart()
-        .listener({ })
         .build()
 
     @Bean
