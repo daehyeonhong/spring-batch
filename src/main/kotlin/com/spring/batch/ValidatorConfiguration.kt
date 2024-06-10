@@ -1,10 +1,7 @@
 package com.spring.batch
 
 import io.klogging.NoCoLogging
-import org.springframework.batch.core.BatchStatus
-import org.springframework.batch.core.ExitStatus
-import org.springframework.batch.core.Job
-import org.springframework.batch.core.Step
+import org.springframework.batch.core.*
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
@@ -14,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
-class StartNextConfiguration(
+class ValidatorConfiguration(
     private val jobRepository: JobRepository,
     private val platformTransactionManager: PlatformTransactionManager,
 ) : NoCoLogging {
@@ -27,6 +24,7 @@ class StartNextConfiguration(
         .start(step1)
         .next(step2)
         .next(step3)
+        .validator(CustomJobParametersValidator())
         .build()
 
     @Bean
@@ -45,12 +43,16 @@ class StartNextConfiguration(
 
     @Bean
     fun step3(
-    ): Step = StepBuilder("step3", this.jobRepository).tasklet(
-        { contribution, chunkContext ->
-            chunkContext.stepContext.stepExecution.status = BatchStatus.FAILED
-            contribution.exitStatus = ExitStatus.STOPPED
-            this.logger.info { "step3 has executed" }
-            RepeatStatus.FINISHED
-        }, this.platformTransactionManager
-    ).build()
+    ): Step = StepBuilder("step3", this.jobRepository).tasklet({ _, _ ->
+        logger.info { "Hello, World!" }
+        RepeatStatus.FINISHED
+    }, this.platformTransactionManager).build()
+}
+
+class CustomJobParametersValidator : JobParametersValidator {
+    override fun validate(parameters: JobParameters?) {
+        if (parameters?.getString("name") == null) {
+            throw JobParametersInvalidException("`name` parameter is missing")
+        }
+    }
 }
