@@ -1,7 +1,9 @@
 package com.spring.batch
 
 import io.klogging.NoCoLogging
-import org.springframework.batch.core.*
+import org.springframework.batch.core.Job
+import org.springframework.batch.core.Step
+import org.springframework.batch.core.job.DefaultJobParametersValidator
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
@@ -23,8 +25,11 @@ class ValidatorConfiguration(
     ): Job = JobBuilder("batchJob", this.jobRepository)
         .start(step1)
         .next(step2)
-        .next(step3)
-        .validator(CustomJobParametersValidator())
+        .next(step3).validator(
+            DefaultJobParametersValidator(
+                arrayOf("targetDate", "name"), emptyArray()
+            )
+        )
         .build()
 
     @Bean
@@ -47,12 +52,4 @@ class ValidatorConfiguration(
         logger.info { "Hello, World!" }
         RepeatStatus.FINISHED
     }, this.platformTransactionManager).build()
-}
-
-class CustomJobParametersValidator : JobParametersValidator {
-    override fun validate(parameters: JobParameters?) {
-        if (parameters?.getString("name") == null) {
-            throw JobParametersInvalidException("`name` parameter is missing")
-        }
-    }
 }
