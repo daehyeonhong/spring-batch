@@ -1,7 +1,9 @@
 package com.spring.batch
 
 import io.klogging.NoCoLogging
-import org.springframework.batch.core.*
+import org.springframework.batch.core.Job
+import org.springframework.batch.core.JobParametersBuilder
+import org.springframework.batch.core.Step
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
@@ -24,7 +26,7 @@ class IncrementerConfiguration(
         .start(step1)
         .next(step2)
         .preventRestart()
-        .incrementer(CustomJobParametersIncrementer())
+        .incrementer { JobParametersBuilder().addLocalDateTime("run.id", LocalDateTime.now()).toJobParameters() }
         .build()
 
     @Bean
@@ -40,11 +42,4 @@ class IncrementerConfiguration(
         logger.info { "Hello, World!" }
         RepeatStatus.FINISHED
     }, this.platformTransactionManager).build()
-}
-
-class CustomJobParametersIncrementer : JobParametersIncrementer {
-    override fun getNext(parameters: JobParameters?): JobParameters {
-        val id = LocalDateTime.now()
-        return JobParametersBuilder().addLocalDateTime("run.id", id).toJobParameters()
-    }
 }
